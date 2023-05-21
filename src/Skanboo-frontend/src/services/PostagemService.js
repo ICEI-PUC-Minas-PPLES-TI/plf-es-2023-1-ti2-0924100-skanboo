@@ -32,4 +32,12 @@ export default {
       }
     });
   },
+
+  excluir: (postId, postagem) => {
+    return http.delete(`postagem/${postId}`, postagem, {
+      headers: {
+        Authorization: localStorage.getItem('token')
+      }
+    });
+  },
 };

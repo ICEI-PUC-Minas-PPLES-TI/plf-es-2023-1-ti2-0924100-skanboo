@@ -14,10 +14,30 @@
         </router-link>
         <button class="editar"><router-link
             :to="{ name: 'TheEditProduct', params: { id: postagem.id } }">Editar</router-link></button>
-        <button class="excluir">Excluir</button>
+        <button class="excluir" @click="selectedPostagem = postagem; dialog = true">Excluir</button>
+
+        <v-row justify="center">
+          <v-dialog v-model="dialog" persistent width="auto">
+            <v-card>
+              <v-card-title class="text-h5">
+                Quer mesmo excluir "{{ selectedPostagem.titulo }}"?
+              </v-card-title>
+              <v-card-text>Essa ação não poderá ser desfeita!</v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="green-darken-1" variant="text" @click="dialog = false">
+                  Cancelar
+                </v-btn>
+                <v-btn color="green-darken-1" variant="text" @click="excluir(selectedPostagem.id), dialog = false">
+                  Excluir
+                </v-btn>
+
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
+
       </div>
-
-
     </div>
   </section>
 </template>
@@ -36,22 +56,37 @@ export default {
         categoria: "",
         status: "",
       },
-      postagens: []
+      postagens: [],
+      dialog: false,
+      selectedPostagem: null
     };
   },
 
   mounted() {
     Postagem.exibirInfo().then(resposta => {
       console.log(resposta.data);
-      const postagens = resposta.data; // Todas postagens do usuario
-      const postsLength = Object.keys(postagens).length
-      console.log(postsLength);
+      const postagens = resposta.data;
+      //const postsLength = Object.keys(postagens).length
+      //console.log(postsLength);
       this.postagens = postagens;
-      //const umaPostagem = postagens.find(postagem => postagem.id === 1) //Depois mudar a ID do produto escolhido
-      //console.log(umaPostagem.titulo);
-      //this.postagem = umaPostagem; // So a postagem escolhida
     }).catch(err => console.log(err.message));
   },
+
+  methods: {
+    excluir() {
+      Postagem.excluir(this.selectedPostagem.id, this.selectedPostagem)
+        .then(() => {
+          alert("Postagem excluída com sucesso");
+          this.errors = [];
+        })
+        .catch((e) => {
+          this.errors = e.response.data.errors;
+          console.log(this.errors);
+          console.log(this.selectedPostagem.id, this.selectedPostagem);
+        });
+    },
+  },
+
 };
 
 </script>
@@ -86,10 +121,11 @@ img {
 }
 
 .container {
-  display: flex;
+  display: grid;
   justify-content: center;
   margin-top: 20px;
   gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
 }
 
 .products {
