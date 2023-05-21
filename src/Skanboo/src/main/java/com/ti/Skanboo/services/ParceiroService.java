@@ -3,15 +3,19 @@ package com.ti.Skanboo.services;
 import java.util.List;
 import java.util.Objects;
 
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ti.Skanboo.exceptions.AuthorizationException;
 import com.ti.Skanboo.models.Parceiro;
 import com.ti.Skanboo.models.enums.UsuarioEnum;
 import com.ti.Skanboo.repositories.ParceiroRepository;
 import com.ti.Skanboo.security.UserSpringSecurity;
-
+import com.ti.Skanboo.utils.InputStreamUtils;
+import org.springframework.util.StringUtils;
+import io.jsonwebtoken.io.IOException;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -45,6 +49,40 @@ public class ParceiroService {
         return parceiro;
     }
 
+    // @Transactional
+    // public void salvarContrato(Long parceiroId, MultipartFile arquivo) throws IOException {
+    //     Parceiro parceiro = encontrarPorId(parceiroId);
+    //     byte[] contratoBytes = InputStreamUtils.lerBytesDoInputStream(arquivo.getInputStream());
+    //     parceiro.setContrato(contratoBytes);
+    //     parceiroRepository.save(parceiro);
+    // }
+
+
+    @Transactional
+    public void salvarContrato(Long parceiroId, MultipartFile arquivo) throws Exception {
+        Parceiro parceiro = encontrarPorId(parceiroId);
+        try {
+            byte[] contratoBytes = InputStreamUtils.lerBytesDoInputStream(arquivo.getInputStream());
+            parceiro.setContrato(contratoBytes);
+            parceiroRepository.save(parceiro);
+        } catch (Exception e) {
+            throw new Exception("Erro ao salvar o contrato: " + e.getMessage());
+        }
+    }
+
+    @Transactional
+    public void salvarLogo(Long parceiroId, MultipartFile arquivo) throws Exception {
+        Parceiro parceiro = encontrarPorId(parceiroId);
+        try {
+            byte[] logoBytes = InputStreamUtils.lerBytesDoInputStream(arquivo.getInputStream());
+            parceiro.setLogo(logoBytes);
+            parceiroRepository.save(parceiro);
+        } catch (Exception e) {
+            throw new Exception("Erro ao salvar o logo: " + e.getMessage());
+        }
+    }
+
+
     @Transactional
     public Parceiro criar(Parceiro obj) {
 
@@ -67,7 +105,8 @@ public class ParceiroService {
         parceiro.setCnpj(obj.getCnpj());
         parceiro.setPlano(obj.getPlano());
         // todo: adicionar contrato e logo
-
+        parceiro.setContrato(obj.getContrato());
+        parceiro.setLogo(obj.getLogo());
         return this.parceiroRepository.save(parceiro);
     }
 
