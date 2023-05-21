@@ -83,9 +83,21 @@ public class ParceiroService {
     }
 
 
-    @Transactional
-    public Parceiro criar(Parceiro obj) {
+    // @Transactional
+    // public Parceiro criar(Parceiro obj) {
 
+    //     UserSpringSecurity userSpringSecurity = UsuarioService.authenticated();
+
+    //     if (Objects.isNull(userSpringSecurity) || !userSpringSecurity.hasRole(UsuarioEnum.ADMIN))
+    //         throw new AuthorizationException("Acesso negado!");
+
+    //     obj.setId(null);
+
+    //     return this.parceiroRepository.save(obj);
+    // }
+
+    @Transactional
+    public Parceiro criar(Parceiro obj, MultipartFile contrato, MultipartFile logo) {
         UserSpringSecurity userSpringSecurity = UsuarioService.authenticated();
 
         if (Objects.isNull(userSpringSecurity) || !userSpringSecurity.hasRole(UsuarioEnum.ADMIN))
@@ -93,8 +105,19 @@ public class ParceiroService {
 
         obj.setId(null);
 
-        return this.parceiroRepository.save(obj);
+        Parceiro parceiro = parceiroRepository.save(obj);
+        Long parceiroId = parceiro.getId();
+
+        try {
+            salvarContrato(parceiroId, contrato);
+            salvarLogo(parceiroId, logo);
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao salvar os arquivos: " + e.getMessage());
+        }
+
+        return parceiro;
     }
+
 
     @Transactional
     public Parceiro atualizarPorId(Parceiro obj) {
