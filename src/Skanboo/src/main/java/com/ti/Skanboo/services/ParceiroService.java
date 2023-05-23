@@ -3,19 +3,16 @@ package com.ti.Skanboo.services;
 import java.util.List;
 import java.util.Objects;
 
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+//import org.springframework.web.multipart.MultipartFile;
 
 import com.ti.Skanboo.exceptions.AuthorizationException;
 import com.ti.Skanboo.models.Parceiro;
 import com.ti.Skanboo.models.enums.UsuarioEnum;
 import com.ti.Skanboo.repositories.ParceiroRepository;
 import com.ti.Skanboo.security.UserSpringSecurity;
-import com.ti.Skanboo.utils.InputStreamUtils;
-import org.springframework.util.StringUtils;
-import io.jsonwebtoken.io.IOException;
+//import com.ti.Skanboo.utils.InputStreamUtils;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -49,55 +46,36 @@ public class ParceiroService {
         return parceiro;
     }
 
+  
+
     // @Transactional
-    // public void salvarContrato(Long parceiroId, MultipartFile arquivo) throws IOException {
+    // public void salvarContrato(Long parceiroId, MultipartFile arquivo) throws Exception {
     //     Parceiro parceiro = encontrarPorId(parceiroId);
-    //     byte[] contratoBytes = InputStreamUtils.lerBytesDoInputStream(arquivo.getInputStream());
-    //     parceiro.setContrato(contratoBytes);
-    //     parceiroRepository.save(parceiro);
+    //     try {
+    //         byte[] contratoBytes = InputStreamUtils.lerBytesDoInputStream(arquivo.getInputStream());
+    //         parceiro.setContrato(contratoBytes);
+    //         parceiroRepository.save(parceiro);
+    //     } catch (Exception e) {
+    //         throw new Exception("Erro ao salvar o contrato: " + e.getMessage());
+    //     }
     // }
-
-
-    @Transactional
-    public void salvarContrato(Long parceiroId, MultipartFile arquivo) throws Exception {
-        Parceiro parceiro = encontrarPorId(parceiroId);
-        try {
-            byte[] contratoBytes = InputStreamUtils.lerBytesDoInputStream(arquivo.getInputStream());
-            parceiro.setContrato(contratoBytes);
-            parceiroRepository.save(parceiro);
-        } catch (Exception e) {
-            throw new Exception("Erro ao salvar o contrato: " + e.getMessage());
-        }
-    }
-
-    @Transactional
-    public void salvarLogo(Long parceiroId, MultipartFile arquivo) throws Exception {
-        Parceiro parceiro = encontrarPorId(parceiroId);
-        try {
-            byte[] logoBytes = InputStreamUtils.lerBytesDoInputStream(arquivo.getInputStream());
-            parceiro.setLogo(logoBytes);
-            parceiroRepository.save(parceiro);
-        } catch (Exception e) {
-            throw new Exception("Erro ao salvar o logo: " + e.getMessage());
-        }
-    }
-
 
     // @Transactional
-    // public Parceiro criar(Parceiro obj) {
-
-    //     UserSpringSecurity userSpringSecurity = UsuarioService.authenticated();
-
-    //     if (Objects.isNull(userSpringSecurity) || !userSpringSecurity.hasRole(UsuarioEnum.ADMIN))
-    //         throw new AuthorizationException("Acesso negado!");
-
-    //     obj.setId(null);
-
-    //     return this.parceiroRepository.save(obj);
+    // public void salvarLogo(Long parceiroId, MultipartFile arquivo) throws Exception {
+    //     Parceiro parceiro = encontrarPorId(parceiroId);
+    //     try {
+    //         byte[] logoBytes = InputStreamUtils.lerBytesDoInputStream(arquivo.getInputStream());
+    //         parceiro.setLogo(logoBytes);
+    //         parceiroRepository.save(parceiro);
+    //     } catch (Exception e) {
+    //         throw new Exception("Erro ao salvar o logo: " + e.getMessage());
+    //     }
     // }
 
+
     @Transactional
-    public Parceiro criar(Parceiro obj, MultipartFile contrato, MultipartFile logo) {
+    public Parceiro criar(Parceiro obj) {
+
         UserSpringSecurity userSpringSecurity = UsuarioService.authenticated();
 
         if (Objects.isNull(userSpringSecurity) || !userSpringSecurity.hasRole(UsuarioEnum.ADMIN))
@@ -105,18 +83,30 @@ public class ParceiroService {
 
         obj.setId(null);
 
-        Parceiro parceiro = parceiroRepository.save(obj);
-        Long parceiroId = parceiro.getId();
-
-        try {
-            salvarContrato(parceiroId, contrato);
-            salvarLogo(parceiroId, logo);
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao salvar os arquivos: " + e.getMessage());
-        }
-
-        return parceiro;
+        return this.parceiroRepository.save(obj);
     }
+
+    // @Transactional
+    // public Parceiro criar(Parceiro obj, MultipartFile contrato, MultipartFile logo) {
+    //     UserSpringSecurity userSpringSecurity = UsuarioService.authenticated();
+
+    //     if (Objects.isNull(userSpringSecurity) || !userSpringSecurity.hasRole(UsuarioEnum.ADMIN))
+    //         throw new AuthorizationException("Acesso negado!");
+
+    //     obj.setId(null);
+
+    //     Parceiro parceiro = parceiroRepository.save(obj);
+    //     Long parceiroId = parceiro.getId();
+
+    //     try {
+    //         salvarContrato(parceiroId, contrato);
+    //         salvarLogo(parceiroId, logo);
+    //     } catch (Exception e) {
+    //         throw new RuntimeException("Erro ao salvar os arquivos: " + e.getMessage());
+    //     }
+
+    //     return parceiro;
+    // }
 
 
     @Transactional
