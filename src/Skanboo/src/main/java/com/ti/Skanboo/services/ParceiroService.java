@@ -130,6 +130,7 @@ public class ParceiroService {
         // todo: adicionar contrato e logo
         parceiro.setContrato(obj.getContrato());
         parceiro.setLogo(obj.getLogo());
+        
         return this.parceiroRepository.save(parceiro);
     }
 

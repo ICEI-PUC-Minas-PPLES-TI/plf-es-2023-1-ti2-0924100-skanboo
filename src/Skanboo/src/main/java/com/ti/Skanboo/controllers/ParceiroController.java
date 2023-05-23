@@ -3,6 +3,7 @@ package com.ti.Skanboo.controllers;
 import java.net.URI;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -25,6 +26,7 @@ import com.ti.Skanboo.services.ParceiroService;
 import jakarta.validation.Valid;
 
 @RestController
+
 @Validated
 @RequestMapping("/parceiro")
 @CrossOrigin(origins = "*")
@@ -58,6 +60,13 @@ public class ParceiroController {
 
     //     return ResponseEntity.created(uri).build();
     // }
+
+    @Bean(name = "multipartResolver")
+    public CommonsMultipartResolver multipartResolver() {
+        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+        multipartResolver.setMaxUploadSize(100000);
+        return multipartResolver;
+    }
 
     @PostMapping
     public ResponseEntity<Void> criar(@RequestParam("contrato") MultipartFile contrato, @RequestParam("logo") MultipartFile logo, @Valid @RequestBody Parceiro obj) {
