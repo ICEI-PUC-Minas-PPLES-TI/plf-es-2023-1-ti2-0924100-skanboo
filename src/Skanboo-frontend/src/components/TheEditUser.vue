@@ -17,50 +17,75 @@
         <div class="dados-usuario">
           <div class="dados-conta">
             <form @submit.prevent="atualizar">
-              <h2>Dados da conta</h2>
-              <label for="email">Editar email</label>
-              <input type="text" id="email" :placeholder="usuario.email ? usuario.email : ''" 
-              v-model="usuario.email" />
+              <!-- <h2>Dados da conta</h2>
+              <label for="email">Email</label>
+              <input type="text" id="email" :placeholder="usuario.email ? usuario.email : ''" v-model="usuario.email" />
 
               <label for="email">Trocar senha</label>
               <input type="text" id="senha" placeholder="*****" />
               <input type="text" id="nova-senha" placeholder="Nova senha" />
-              <input type="text" id="nova-senha" placeholder="Confirmar senha" />
+              <input type="text" id="nova-senha" placeholder="Confirmar senha" /> -->
 
               <h2>Dados pessoais</h2>
-              <label for="nome">Editar nome</label>
-              <input type="text" id="nome" :placeholder="usuario.nome ? usuario.nome : ''" 
-              v-model="usuario.nome" />
 
-              <label for="nome">Editar nascimento</label>
-              <input type="date" id="nascimento" />
+              <label for="fotos">Adicionar foto</label>
+              <input type="file" id="fotos" name="fotos" /><br />
+
+              <label for="nome">Editar nome</label>
+              <input type="text" id="nome" :placeholder="usuario.nome ? usuario.nome : ''" v-model="usuario.nome" />
+
+              <!-- <label for="nome">Editar nascimento</label>
+              <input type="date" id="nascimento" /> -->
 
               <label for="telefone">Editar telefone</label>
-              <input
-                type="text"
-                id="telefone"
-                name="telefone"
-                class="form-control cel-sp-mask"
-                :placeholder="usuario.telefone ? usuario.telefone : ''" 
-                v-model="usuario.telefone"
-              />
+              <input type="text" id="telefone" name="telefone" class="form-control cel-sp-mask"
+                :placeholder="usuario.telefone ? usuario.telefone : ''" v-model="usuario.telefone" />
 
-              <label for="cpf">Editar CPF</label>
-              <input
-                type="text"
-                id="cpf"
-                name="cpf"
-                class="form-control cpf-mask"
-                :placeholder="usuario.cpf ? usuario.cpf : ''" 
-                v-model="usuario.cpf"
-              />
+              <label for="uf">UF</label>
+              <select v-model="usuario.uf">
+                <option value="">Selecione</option>
+                <option value="AC">Acre</option>
+                <option value="AL">Alagoas</option>
+                <option value="AP">Amapá</option>
+                <option value="AM">Amazonas</option>
+                <option value="BA">Bahia</option>
+                <option value="CE">Ceará</option>
+                <option value="DF">Distrito Federal</option>
+                <option value="ES">Espirito Santo</option>
+                <option value="GO">Goiás</option>
+                <option value="MA">Maranhão</option>
+                <option value="MS">Mato Grosso do Sul</option>
+                <option value="MT">Mato Grosso</option>
+                <option value="MG">Minas Gerais</option>
+                <option value="PA">Pará</option>
+                <option value="PB">Paraíba</option>
+                <option value="PR">Paraná</option>
+                <option value="PE">Pernambuco</option>
+                <option value="PI">Piauí</option>
+                <option value="RJ">Rio de Janeiro</option>
+                <option value="RN">Rio Grande do Norte</option>
+                <option value="RS">Rio Grande do Sul</option>
+                <option value="RO">Rondônia</option>
+                <option value="RR">Roraima</option>
+                <option value="SC">Santa Catarina</option>
+                <option value="SP">São Paulo</option>
+                <option value="SE">Sergipe</option>
+                <option value="TO">Tocantins</option>
+              </select>
+
+              <label for="nome">Editar nome</label>
+              <input type="text" id="nome" :placeholder="usuario.nome ? usuario.nome : ''" v-model="usuario.nome" />
+
+              <!-- <label for="cpf">Editar CPF</label>
+              <input type="text" id="cpf" name="cpf" class="form-control cpf-mask"
+                :placeholder="usuario.cpf ? usuario.cpf : ''" v-model="usuario.cpf" /> -->
               <button class="salvar">Salvar alterações</button>
               <button class="cancelar">Cancelar</button>
             </form>
           </div>
         </div>
       </div>
-      
+
     </div>
   </section>
 </template>
@@ -88,7 +113,7 @@ export default {
   mounted() {
     Usuario.exibirInfo().then((resposta) => {
       console.log(resposta.data);
-      this.usuario = resposta.data ;
+      this.usuario = resposta.data;
     })
   },
 
@@ -178,6 +203,22 @@ input {
   margin-bottom: 15px;
 }
 
+select {
+  display: block;
+  box-sizing: border-box;
+  width: 680px;
+  height: 40px;
+  background-color: #fcfcfc;
+  border: 1px solid #e2e2e2;
+  border-radius: 4px;
+  color: #9798b0;
+  font-size: 16px;
+  letter-spacing: -0.006em;
+  padding: 0px;
+  margin-bottom: 15px;
+  margin-left: 0;
+}
+
 input::placeholder {
   color: #9798b0;
 }
@@ -188,6 +229,7 @@ label {
   margin-bottom: 5px;
   text-align: left !important;
 }
+
 h1,
 h2 {
   padding: 10px;

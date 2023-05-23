@@ -16,7 +16,7 @@
             type="text" 
             id="nome" 
             maxlength="30"
-            v-model="parceiro.titulo"
+            v-model="parceiro.nome"
             />
 
             <label for="logo">Logo da empresa</label><br />
@@ -89,7 +89,7 @@ export default {
 
   methods: {
     criar() {
-      Parceiro.criar(this.Parceiro)
+      Parceiro.criar(this.parceiro)
         .then((/*resposta*/) => {
           alert("Parceiro salvo com sucesso");
           this.errors = [];

@@ -14,6 +14,7 @@
           <p class="telefoneUsuario">Telefone</p>
           <p class="senhaUsuario">Senha</p>
           <p class="CPFUsuario">CPF</p>
+          <p class="estadoUsuario">Estado</p>
         </div>
 
         <div class="info-usuario">
@@ -29,6 +30,7 @@
           <p class="telefone">{{ usuario.telefone }}</p>
           <p class="senha">*****</p>
           <p class="CPF">{{ usuario.cpf }}</p>
+          <p class="estado">{{ usuario.uf }}</p>
         </div>
       </div>
       <button class="editar"><a href="/editarUsuarioView">Editar</a></button>
