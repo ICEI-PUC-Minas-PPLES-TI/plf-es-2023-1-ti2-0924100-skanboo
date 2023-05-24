@@ -119,25 +119,28 @@ export default {
 
   methods: {
     atualizar() {
-      const dadosUsuario = {
-        nome: this.usuario.nome,
-        cpf: this.usuario.cpf,
-        uf: this.usuario.uf,
-        email: this.usuario.email,
-        senha: "teste",
-        dataNascimento: "1997-04-20",
-        telefone: this.usuario.telefone
-      }
-      Usuario.atualizar(dadosUsuario)
-        .then((/*resposta*/) => {
-          alert("Informações do usuario editadas com sucesso");
-          this.errors = [];
-        })
-        .catch((e) => {
-          this.errors = e.response.data.errors;
-          console.log(this.errors);
-          console.log(this.usuario);
-        });
+      this.uploadFoto().then((foto) => {
+        this.postagem.foto = foto;
+        const dadosUsuario = {
+          nome: this.usuario.nome,
+          cpf: this.usuario.cpf,
+          uf: this.usuario.uf,
+          email: this.usuario.email,
+          senha: "teste",
+          dataNascimento: "1997-04-20",
+          telefone: this.usuario.telefone
+        }
+        Usuario.atualizar(dadosUsuario)
+          .then((/*resposta*/) => {
+            alert("Informações do usuario editadas com sucesso");
+            this.errors = [];
+          })
+          .catch((e) => {
+            this.errors = e.response.data.errors;
+            console.log(this.errors);
+            console.log(this.usuario);
+          });
+      });
     },
     uploadFoto() {
       return new Promise((resolve, reject) => {
