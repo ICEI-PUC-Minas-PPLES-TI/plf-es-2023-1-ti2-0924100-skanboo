@@ -119,7 +119,16 @@ export default {
 
   methods: {
     atualizar() {
-      Usuario.atualizar(this.usuario.id, this.usuario)
+      const dadosUsuario = {
+        nome: this.usuario.nome,
+        cpf: this.usuario.cpf,
+        uf: this.usuario.uf,
+        email: this.usuario.email,
+        senha: "teste",
+        dataNascimento: "1997-04-20",
+        telefone: this.usuario.telefone
+      }
+      Usuario.atualizar(dadosUsuario)
         .then((/*resposta*/) => {
           alert("Informações do usuario editadas com sucesso");
           this.errors = [];
@@ -129,6 +138,29 @@ export default {
           console.log(this.errors);
           console.log(this.usuario);
         });
+    },
+    uploadFoto() {
+      return new Promise((resolve, reject) => {
+        const fileInput = document.querySelector('input[type=file]');
+        const file = fileInput.files[0];
+
+        const reader = new FileReader();
+        reader.addEventListener(
+          'load',
+          () => {
+            resolve(reader.result);
+          },
+          false
+        );
+
+        reader.addEventListener('error', reject);
+
+        if (file) {
+          reader.readAsDataURL(file);
+        } else {
+          resolve(null);
+        }
+      });
     },
   }
 };
